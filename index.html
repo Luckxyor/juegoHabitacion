@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>חֶדֶר</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game-layout">
+    <section class="room-board" aria-label="Juego de la habitación">
+      <div class="options options-top" id="top-options"></div>
+
+      <div class="central-frame" id="central-frame">
+        <img id="central-image" src="img/imgCentral/vacio.jpeg" alt="Habitación vacía">
+      </div>
+
+      <div class="options options-bottom" id="bottom-options"></div>
+    </section>
+
+    <aside class="control-panel">
+      <button class="audio-button" id="audio-button" type="button" aria-label="Reproducir audio" title="Reproducir audio">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M10 25h12l15-13v40L22 39H10z"></path>
+          <path class="sound-wave" d="M45 23c5 5 5 13 0 18M51 16c9 9 9 23 0 32"></path>
+        </svg>
+      </button>
+      <div class="progress-dots" id="progress-dots" aria-label="Progreso del juego"></div>
+    </aside>
+  </main>
+
+  <div class="feedback" id="feedback" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

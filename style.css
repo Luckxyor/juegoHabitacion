@@ -1,0 +1,296 @@
+:root {
+  --sky: #dff3fa;
+  --wall: #fffaf0;
+  --line: #c5d8db;
+  --blue: #4e9db5;
+  --blue-dark: #286b82;
+  --green: #73bd79;
+  --red: #e68778;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--sky);
+  color: var(--blue-dark);
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+.game-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  gap: clamp(20px, 4vw, 64px);
+  align-items: center;
+  width: min(1180px, 94vw);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 28px 0;
+}
+
+.room-board {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 14px;
+  width: min(820px, 100%);
+  margin: 0 auto;
+}
+
+.options {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+
+.options-top {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.options-bottom {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.option {
+  position: relative;
+  display: block;
+  aspect-ratio: 1.22;
+  min-width: 0;
+  padding: 5px;
+  border: 4px solid transparent;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.option:hover,
+.option:focus-visible {
+  transform: translateY(-4px) scale(1.03);
+  border-color: var(--blue);
+  outline: none;
+}
+
+.option:disabled {
+  cursor: default;
+}
+
+.option img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.option.is-correct {
+  animation: correct 650ms ease;
+  border-color: var(--green);
+}
+
+.option.is-solved img {
+  filter: brightness(0.55);
+}
+
+.option.is-solved::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 4px solid white;
+  border-radius: 50%;
+  background: var(--green);
+  color: white;
+  content: "✓";
+  font-size: 29px;
+  font-weight: bold;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.option.is-wrong {
+  animation: wrong 430ms ease;
+  border-color: var(--red);
+}
+
+.central-frame {
+  position: relative;
+  overflow: hidden;
+  height: clamp(220px, 42vw, 480px);
+  min-height: 0;
+  border: 10px solid #fff;
+  border-radius: 24px;
+  background: var(--wall);
+  box-shadow: 0 12px 28px rgba(42, 98, 112, 0.18);
+}
+
+.central-frame::after {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(40, 107, 130, 0.15);
+  border-radius: 14px;
+  content: "";
+  pointer-events: none;
+}
+
+#central-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+}
+
+.central-frame.is-correct {
+  animation: central-correct 700ms ease;
+}
+
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.audio-button {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  aspect-ratio: 1;
+  padding: 20px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 8px 0 var(--blue-dark), 0 14px 22px rgba(42, 98, 112, 0.2);
+  cursor: pointer;
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+}
+
+.audio-button:hover,
+.audio-button:focus-visible {
+  background: #62aec3;
+  outline: 4px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 4px;
+}
+
+.audio-button:active,
+.audio-button.is-playing {
+  transform: translateY(5px) scale(0.97);
+  box-shadow: 0 3px 0 var(--blue-dark), 0 8px 15px rgba(42, 98, 112, 0.2);
+}
+
+.audio-button svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: white;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4;
+}
+
+.audio-button svg path:first-child {
+  fill: white;
+  stroke: white;
+}
+
+.progress-dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+  width: 108px;
+}
+
+.progress-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(40, 107, 130, 0.2);
+}
+
+.progress-dot.is-done {
+  background: var(--green);
+  transform: scale(1.15);
+}
+
+.progress-dot.is-current {
+  background: var(--blue);
+}
+
+.feedback {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+@keyframes correct {
+  0%, 100% { transform: scale(1); }
+  45% { transform: scale(1.12) rotate(2deg); }
+}
+
+@keyframes wrong {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+@keyframes central-correct {
+  0% { transform: scale(0.96); opacity: 0.65; }
+  60% { transform: scale(1.025); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 720px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 18px 0 28px;
+  }
+
+  .room-board {
+    grid-template-rows: auto auto auto;
+    gap: 9px;
+  }
+
+  .options {
+    gap: 6px;
+  }
+
+  .option {
+    padding: 3px;
+    border-width: 3px;
+    border-radius: 10px;
+  }
+
+  .central-frame,
+  #central-image {
+    height: clamp(180px, 58vw, 300px);
+    min-height: 0;
+  }
+
+  .central-frame {
+    border-width: 6px;
+    border-radius: 16px;
+  }
+
+  .control-panel {
+    gap: 15px;
+  }
+
+  .audio-button {
+    width: 82px;
+    padding: 15px;
+    box-shadow: 0 6px 0 var(--blue-dark), 0 10px 18px rgba(42, 98, 112, 0.2);
+  }
+}
