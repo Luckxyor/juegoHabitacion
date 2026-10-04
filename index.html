@@ -26,10 +26,18 @@
         </svg>
       </button>
       <div class="progress-dots" id="progress-dots" aria-label="Progreso del juego"></div>
+      <div class="timer" id="timer" aria-live="polite">00:00</div>
     </aside>
   </main>
 
   <div class="feedback" id="feedback" aria-live="polite"></div>
+  <section class="finish-screen" id="finish-screen" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="finish-title">
+    <div class="finish-card">
+      <h1 id="finish-title" lang="he" dir="rtl">טוב מאוד</h1>
+      <strong id="final-time">00:00</strong>
+      <button id="restart-button" type="button">Reiniciar</button>
+    </div>
+  </section>
   <script src="script.js"></script>
 </body>
 </html>
